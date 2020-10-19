@@ -7,31 +7,33 @@ import MyList from "../my-list";
 import MoviePageId from "../movie-page-id";
 import MoviePageReview from "../movie-page-review";
 import MoviePage from "../movie-page";
+import AddReview from "../add-review";
 
 const App = (props) => {
-  const {movieTitle, movieJenre, movieDate} = props;
+  const {films} = props;
 
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <StartPage movieTitle={movieTitle}
-            movieJenre={movieJenre}
-            movieDate={movieDate}/>
+          <StartPage movies={films}/>
         </Route>
         <Route exact path="/login">
           <Login />
         </Route>
         <Route exact path="/mylist">
-          <MyList />
+          <MyList myListFilms={films}/>
         </Route>
         <Route exact path="/films/:id?">
-          <MoviePageId />
-          <MoviePage />
+          <MoviePageId moviesArray={films}/>
+          <MoviePage filmsPage={films}/>
         </Route>
         <Route exact path="/films/:id/review">
           <MoviePageReview />
-          <MoviePage />
+          <MoviePage filmsPage={films}/>
+        </Route>
+        <Route exact path="/films/:id/reviewadd">
+          <AddReview />
         </Route>
         <Route>
           <h2>Page NOt Found</h2>
@@ -42,9 +44,16 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  movieTitle: PropTypes.string.isRequired,
-  movieJenre: PropTypes.string.isRequired,
-  movieDate: PropTypes.number.isRequired
+  films: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    director: PropTypes.string.isRequired,
+    starring: PropTypes.arrayOf(PropTypes.string.isRequired),
+    runTime: PropTypes.string.isRequired,
+    genre: PropTypes.string.isRequired,
+    released: PropTypes.number.isRequired,
+    srcVideo: PropTypes.string.isRequired,
+    srcPicture: PropTypes.string.isRequired,
+  })),
 };
 
 export default App;
